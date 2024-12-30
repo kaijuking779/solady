@@ -18,7 +18,11 @@ pragma solidity ^0.8.4;
 ///   the total sum of all balances must be equal to `totalSupply()`.
 /// - Check that the overridden function is actually used in the function you want to
 ///   change the behavior of. Much of the code has been manually inlined for performance.
-abstract contract ERC20 {
+
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/extensions/IERC20Permit.sol";
+
+abstract contract ERC20 is IERC20, IERC20Permit {
     /*´:°•.°+.*•´.*:˚.°*.˚•´.°:°•.°•.*•´.*:˚.°*.˚•´.°:°•.°+.*•´.*:*/
     /*                       CUSTOM ERRORS                        */
     /*.•°:°.´+˚.*°.˚:*.´•*.+°.•°:´*.´•*.•°.•°:°.´:•˚°.*°.˚:*.´+°.•*/
@@ -47,15 +51,7 @@ abstract contract ERC20 {
     /// @dev The allowance of Permit2 is fixed at infinity.
     error Permit2AllowanceIsFixedAtInfinity();
 
-    /*´:°•.°+.*•´.*:˚.°*.˚•´.°:°•.°•.*•´.*:˚.°*.˚•´.°:°•.°+.*•´.*:*/
-    /*                           EVENTS                           */
-    /*.•°:°.´+˚.*°.˚:*.´•*.+°.•°:´*.´•*.•°.•°:°.´:•˚°.*°.˚:*.´+°.•*/
 
-    /// @dev Emitted when `amount` tokens is transferred from `from` to `to`.
-    event Transfer(address indexed from, address indexed to, uint256 amount);
-
-    /// @dev Emitted when `amount` tokens is approved by `owner` to be used by `spender`.
-    event Approval(address indexed owner, address indexed spender, uint256 amount);
 
     /// @dev `keccak256(bytes("Transfer(address,address,uint256)"))`.
     uint256 private constant _TRANSFER_EVENT_SIGNATURE =
